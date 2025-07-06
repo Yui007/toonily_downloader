@@ -86,7 +86,7 @@ python main.py search "Not a Lady Anymore"
 Download chapters directly by providing the manga URL and desired chapter numbers to the `scrape` command.
 
 ```bash
-python main.py scrape <manga_url> <chapters_to_download>
+python main.py scrape <manga_url> <chapters_to_download> [--pdf] [--delete]
 ```
 
 -   `<manga_url>`: **(Required)** The full URL of the manga series page on Toonily.
@@ -95,6 +95,8 @@ python main.py scrape <manga_url> <chapters_to_download>
     -   Ranges: `1-5` (downloads chapters 1, 2, 3, 4, 5)
     -   Mixed: `1-3, 7, 10.5-12`
     -   All chapters: `all`
+    -   --pdf: Convert downloaded chapters to PDF
+    -   --delete: Delete image files after successful PDF conversion (requires --pdf)
 
 **Example (Interactive chapter selection):**
 
@@ -112,6 +114,18 @@ python main.py scrape https://toonily.com/serie/not-a-lady-anymore/ "1,2,3.5,5-7
 
 ```bash
 python main.py scrape https://toonily.com/serie/solo-leveling/ all
+```
+
+**Example (Basic PDF conversion):**
+
+```bash
+python main.py scrape https://toonily.com/serie/not-a-lady-anymore/ "1-5" --pdf
+```
+
+**Example (PDF conversion with image deletion):**
+
+```bash
+python main.py scrape https://toonily.com/serie/solo-leveling/ all --pdf --delete
 ```
 
 ### Output Directory
