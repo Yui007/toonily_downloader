@@ -1,4 +1,4 @@
-# CLI Usage for Manga Scraper
+# Toonily Manga Scraper - GUI Usage Guide
 
 This document outlines how to use the Manga Scraper via the command-line interface (CLI), supporting both interactive prompts and direct argument-based commands.
 
