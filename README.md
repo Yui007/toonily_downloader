@@ -58,7 +58,7 @@ This Python tool helps manga fans download and organize their favorite series fr
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/Yui007/toonily_downloader.git
-    cd toonily
+    cd toonily_downloader
     ```
 2.  **Install dependencies:**
     ```bash
