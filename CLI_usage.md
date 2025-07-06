@@ -10,7 +10,7 @@ Ensure you have Python 3.10+ installed and all dependencies are met.
 
 ```bash
 # Navigate to the project root directory
-cd /path/to/toonily/
+cd /path/to/toonily_downloader/
 ```
 
 ---
@@ -24,6 +24,8 @@ python main.py
 ```
 
 **Interactive Flow:**
+
+To start the Interactive Flow Type 1 to select Option 1
 
 1.  **Choose an Option:**
     You will be prompted to choose between searching for a manga, entering a URL directly, or exiting by entering a number.
