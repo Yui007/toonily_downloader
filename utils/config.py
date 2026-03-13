@@ -15,3 +15,6 @@ DOWNLOAD_THREADS = 10
 # Toonily Settings
 BASE_URL = "https://toonily.com"
 SEARCH_URL = f"{BASE_URL}/search"
+
+# FlareSolverr Settings
+FLARESOLVERR_URL = "http://localhost:8191/v1"

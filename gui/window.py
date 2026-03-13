@@ -56,26 +56,16 @@ class ScraperThread(QThread):
     error_occurred = pyqtSignal(str)
     overall_progress = pyqtSignal(int) # For overall download progress (percentage)
 
-    def __init__(self, url, chapters_to_download=None, create_pdf=False, delete_images=False):
+    def __init__(self, manga_details, chapters_to_download=None, create_pdf=False, delete_images=False):
         super().__init__()
-        self.url = url
+        self.manga_details = manga_details
         self.chapters_to_download = chapters_to_download
         self.create_pdf = create_pdf
         self.delete_images = delete_images
 
     def run(self):
         try:
-            log_info(f"Starting to scrape: {self.url}")
-            html = fetch_html(self.url)
-            if not html:
-                self.error_occurred.emit("Could not retrieve manga page. Exiting.")
-                return
-
-            manga_details = parse_manga_details(html)
-            if not manga_details:
-                self.error_occurred.emit("Could not parse manga details. Exiting.")
-                return
-
+            manga_details = self.manga_details
             self.manga_details_fetched.emit(manga_details)
 
             chapters = manga_details["chapters"]
@@ -452,7 +442,7 @@ class MainWindow(QMainWindow):
         self.progress_bar.setValue(0) # Reset progress bar
 
         self.scraper_thread = ScraperThread(
-            url=self.current_manga_url, # Use the stored URL
+            manga_details=self.current_manga_details,
             chapters_to_download=self.selected_chapters_for_download,
             create_pdf=pdf_conversion,
             delete_images=delete_after_pdf

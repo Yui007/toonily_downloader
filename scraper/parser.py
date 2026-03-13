@@ -121,11 +121,16 @@ def parse_chapter_images(html):
     try:
         soup = BeautifulSoup(html, "html.parser")
         images = []
-        reading_content = soup.find("div", class_="reading-content")
-        if reading_content:
-            for img_tag in reading_content.find_all("img", class_="wp-manga-chapter-img"):
-                if 'data-src' in img_tag.attrs:
-                    images.append(img_tag["data-src"].strip())
+
+        for img_tag in soup.find_all("img"):
+            url = (
+                img_tag.get("data-src")
+                or img_tag.get("data-lazy-src")
+                or img_tag.get("src")
+            )
+            if url and "data.tnlycdn.com" in url:
+                images.append(url.strip())
+
         log_success(f"Parsed {len(images)} images")
         return images
     except Exception as e:

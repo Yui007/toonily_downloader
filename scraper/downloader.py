@@ -4,22 +4,18 @@
 
 import os
 import mimetypes
-import cloudscraper
 from concurrent.futures import ThreadPoolExecutor
 
+from scraper.fetcher import get_download_session
 from utils.config import DOWNLOAD_DIR, DOWNLOAD_THREADS
 from utils.logger import log_success, log_error, log_info
 from utils.pdf_converter import convert_to_pdf
 
-def download_image(url, folder_path, image_index, referer_url, user_agent):
-    """Downloads a single image and saves it using cloudscraper with custom headers."""
-    scraper = cloudscraper.create_scraper()
-    custom_headers = {
-        "Referer": referer_url,
-        "User-Agent": user_agent
-    }
+
+def download_image(session, url, folder_path, image_index):
+    """Downloads a single image using a session with FlareSolverr cookies."""
     try:
-        img_res = scraper.get(url, headers=custom_headers, stream=True)
+        img_res = session.get(url, timeout=30)
         img_res.raise_for_status()
 
         # Determine file extension from Content-Type header
@@ -30,7 +26,7 @@ def download_image(url, folder_path, image_index, referer_url, user_agent):
             ext = ".jpg"
 
         # Fallback if the content type is not an image
-        if not ext or "image" not in content_type:
+        if not ext or (content_type and "image" not in content_type):
             # Try to get from URL
             url_ext = os.path.splitext(url.split("?")[0])[1]
             if url_ext in [".jpg", ".jpeg", ".png", ".webp", ".gif"]:
@@ -59,15 +55,14 @@ def download_chapter(chapter_title, image_urls, manga_title, chapter_url, create
 
     log_info(f"Downloading chapter: {chapter_title}")
 
-    # Get a user agent from a new scraper instance for consistency
-    temp_scraper = cloudscraper.create_scraper()
-    user_agent = temp_scraper.headers.get("User-Agent")
+    # Create a session with FlareSolverr cookies for this chapter
+    session = get_download_session(chapter_url)
 
     downloaded_image_paths = []
     with ThreadPoolExecutor(max_workers=DOWNLOAD_THREADS) as executor:
         futures = []
         for i, img_url in enumerate(image_urls):
-            futures.append(executor.submit(download_image, img_url, chapter_folder, i + 1, chapter_url, user_agent))
+            futures.append(executor.submit(download_image, session, img_url, chapter_folder, i + 1))
 
         for future in futures:
             result = future.result() # Wait for all downloads to complete
@@ -85,8 +80,6 @@ def download_chapter(chapter_title, image_urls, manga_title, chapter_url, create
 
 if __name__ == "__main__":
     # Example usage for testing
-    # This requires a list of image URLs from the parser
-    # For demonstration, we'll use placeholder URLs
     test_image_urls = [
         "https://via.placeholder.com/800x1200.png?text=Image+1",
         "https://via.placeholder.com/800x1200.png?text=Image+2",

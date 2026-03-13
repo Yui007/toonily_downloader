@@ -45,7 +45,7 @@ This Python tool helps manga fans download and organize their favorite series fr
 -   **Python 3.10+**
 -   `requests`, `beautifulsoup4`, `aiohttp` (for async)
 -   `rich`, `typer` (for beautiful, animated CLI experience)
--   `cloudscraper`, (Anti Bot Measures)
+-   `FlareSolverr` (Cloudflare bypass — runs as Docker container)
 -   `Pillow`, (For Pdf Conversion)
 -   `PyQt6` (for GUI)
 
@@ -64,6 +64,18 @@ This Python tool helps manga fans download and organize their favorite series fr
     ```bash
     pip install -r requirements.txt
     ```
+3.  **Download & run FlareSolverr** (required for Cloudflare bypass):
+
+    Download the latest release for your platform from the [FlareSolverr GitHub Releases](https://github.com/FlareSolverr/FlareSolverr/releases) page.
+
+    -   **Windows:** Download the `flaresolverr_windows_x64.zip`, extract it, and run `flaresolverr.exe`.
+    -   **Linux:** Download the `flaresolverr_linux_x64.tar.gz`, extract it, and run `./flaresolverr`.
+    -   **Docker** (alternative):
+        ```bash
+        docker run -d --name flaresolverr -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest
+        ```
+
+    FlareSolverr must be running on `http://localhost:8191` before using the scraper.
 
 ### Running the Application
 
